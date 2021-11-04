@@ -9,27 +9,13 @@
 </head>
 <body>
 
-  <main>
-    <div>
-      <h1 class="title"> It Works! </h1>
-      <p class="subtitle">
-        Congratulations, you have just created your first AdonisJS app.
-      </p>
+  <a href='/'>Home</a>
+  <a href='{{route('about')}}'>about</a>
+  <a href='{{route('contacts')}}'>contacts</a>
 
-      <ul>
-        <li>
-          The route for this page is defined inside <code>start/routes.ts</code> file
-        </li>
-
-        <li>
-          You can update this page by editing <code>resources/views/welcome.edge</code> file
-        </li>
-
-        <li>
-          If you run into problems, you can reach us on <a href="https://discord.gg/vDcEjq6?">Discord</a> or the <a href="https://forum.adonisjs.com/">Forum</a>.
-        </li>
-      </ul>
-    </div>
-  </main>
+  {{{'<p>hellow</p>'}}}
+  {{'<p>hellow</p>'}}
+  @set('alo', 'shiko')
+  {{alo}}
 </body>
 </html>

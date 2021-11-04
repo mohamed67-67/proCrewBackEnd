@@ -18,17 +18,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Server_1 = __importDefault(global[Symbol.for('ioc.use')]("Adonis/Core/Server"));
-Server_1.default.middleware.register([
-    () => Promise.resolve().then(() => __importStar(global[Symbol.for('ioc.use')]("Adonis/Core/BodyParser"))),
-    () => Promise.resolve().then(() => __importStar(global[Symbol.for('ioc.use')]('App/Middleware/SilentAuth'))),
-]);
-Server_1.default.middleware.registerNamed({
-    auth: () => Promise.resolve().then(() => __importStar(global[Symbol.for('ioc.use')]('App/Middleware/Auth'))),
-    guest: () => Promise.resolve().then(() => __importStar(global[Symbol.for('ioc.use')]('App/Middleware/Guest')))
-});
-//# sourceMappingURL=kernel.js.map
+const authConfig = {
+    guard: 'web',
+    list: {
+        web: {
+            driver: 'session',
+            provider: {
+                driver: 'lucid',
+                identifierKey: 'id',
+                uids: ['email'],
+                model: () => Promise.resolve().then(() => __importStar(global[Symbol.for('ioc.use')]('App/Models/User'))),
+            },
+        },
+    },
+};
+exports.default = authConfig;
+//# sourceMappingURL=auth.js.map

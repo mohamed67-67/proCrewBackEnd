@@ -20,28 +20,24 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-
-Route.group(() => {
-
-    Route.get('/', 'TasksController.index')
-    Route.post('/tasks', 'TasksController.store')
-    Route.patch('/tasks/:id', 'TasksController.update')
-    Route.delete('/tasks/:id', 'TasksController.destroy')
-}).middleware('auth')
-
-Route.get('/register', 'AuthController.showRegister').middleware('guest')
+Route.get('/', () => {
+    return 'Hello world'
+})
+// Auth Routes
 Route.post('/register', 'AuthController.register')
 
-Route.post('/logout', 'AuthController.logout')
+Route.get('/logout', 'AuthController.logout')
 
-Route.get('/login', 'AuthController.showlogin').middleware('guest')
 Route.post('/login', 'AuthController.login')
 
 
+// Posts Routes
+
+// Route.group(() => {
+Route.get('/posts', 'PostsController.getPosts')
+Route.post('/posts', 'PostsController.createPost')
+Route.patch('/posts/:id', 'PostsController.updatePost')
+Route.delete('/posts/:id', 'PostsController.deletePost')
+// }).middleware('auth')
 
 
-// Route.get('/', 'PagesController.home')
-
-// Route.get('/about-us/:name?', 'PagesController.about').as('about')
-
-// Route.get('/contacts-us', 'PagesController.contacts').as('contacts')

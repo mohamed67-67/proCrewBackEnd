@@ -15,35 +15,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const luxon_1 = require("luxon");
 const Orm_1 = global[Symbol.for('ioc.use')]("Adonis/Lucid/Orm");
 const User_1 = __importDefault(require("./User"));
-class Task extends Orm_1.BaseModel {
+class Post extends Orm_1.BaseModel {
 }
 __decorate([
     Orm_1.column({ isPrimary: true }),
     __metadata("design:type", Number)
-], Task.prototype, "id", void 0);
+], Post.prototype, "id", void 0);
 __decorate([
     Orm_1.column(),
     __metadata("design:type", Number)
-], Task.prototype, "userId", void 0);
+], Post.prototype, "user_id", void 0);
 __decorate([
     Orm_1.column(),
     __metadata("design:type", String)
-], Task.prototype, "title", void 0);
+], Post.prototype, "user_name", void 0);
 __decorate([
     Orm_1.column(),
-    __metadata("design:type", Boolean)
-], Task.prototype, "isCompleted", void 0);
+    __metadata("design:type", String)
+], Post.prototype, "title", void 0);
+__decorate([
+    Orm_1.column(),
+    __metadata("design:type", String)
+], Post.prototype, "subject", void 0);
 __decorate([
     Orm_1.column.dateTime({ autoCreate: true }),
     __metadata("design:type", luxon_1.DateTime)
-], Task.prototype, "createdAt", void 0);
+], Post.prototype, "createdAt", void 0);
 __decorate([
     Orm_1.column.dateTime({ autoCreate: true, autoUpdate: true }),
     __metadata("design:type", luxon_1.DateTime)
-], Task.prototype, "updatedAt", void 0);
+], Post.prototype, "updatedAt", void 0);
 __decorate([
     Orm_1.belongsTo(() => User_1.default),
     __metadata("design:type", Object)
-], Task.prototype, "user", void 0);
-exports.default = Task;
-//# sourceMappingURL=Task.js.map
+], Post.prototype, "user", void 0);
+exports.default = Post;
+//# sourceMappingURL=Post.js.map

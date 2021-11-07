@@ -10,41 +10,43 @@ class AuthController {
         return view.render('auth/register');
     }
     async register({ response, auth, request }) {
-        const schemaValidation = Validator_1.schema.create({
-            name: Validator_1.schema.string({ trim: true }),
-            email: Validator_1.schema.string({ trim: true }, [
-                Validator_1.rules.email(),
-                Validator_1.rules.maxLength(255),
-                Validator_1.rules.unique({ table: 'users', column: 'email' })
-            ]),
-            password: Validator_1.schema.string({ trim: true }, [
-                Validator_1.rules.confirmed()
-            ])
-        });
-        const validatedData = await request.validate({
-            schema: schemaValidation
-        });
-        const user = await User_1.default.create(validatedData);
-        await auth.login(user);
-        return response.redirect('/');
+        try {
+            const schemaValidation = Validator_1.schema.create({
+                name: Validator_1.schema.string({ trim: true }),
+                email: Validator_1.schema.string({ trim: true }, [
+                    Validator_1.rules.email(),
+                    Validator_1.rules.maxLength(255),
+                    Validator_1.rules.unique({ table: 'users', column: 'email' })
+                ]),
+                password: Validator_1.schema.string({ trim: true }, [
+                    Validator_1.rules.confirmed()
+                ])
+            });
+            const validatedData = await request.validate({
+                schema: schemaValidation
+            });
+            const user = await User_1.default.create(validatedData);
+            response.json(user);
+            await auth.login(user);
+        }
+        catch (error) {
+            response.json({ error: 'this Email is Already Registered!!' });
+        }
     }
-    async logout({ auth, response }) {
+    async logout({ auth }) {
         await auth.logout();
-        response.redirect('/');
     }
     showlogin({ view }) {
         return view.render('auth/login');
     }
-    async login({ response, auth, request, session }) {
+    async login({ response, auth, request }) {
         const { email, password } = request.all();
         try {
             await auth.attempt(email, password);
-            response.json(auth);
-            console.log(email, password);
+            response.json({ authorized: auth.isLoggedIn, user: auth.user });
         }
         catch (error) {
-            session.flash('notification', 'fuck you');
-            response.json(auth);
+            return response.json({ error: error.message });
         }
     }
 }

@@ -7,7 +7,8 @@ import {
   hasMany,
   HasMany
 } from '@ioc:Adonis/Lucid/Orm'
-import Task from './Task'
+
+import Post from './Post'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -38,6 +39,6 @@ export default class User extends BaseModel {
     }
   }
 
-  @hasMany(() => Task)
-  public tasks: HasMany<typeof Task>
+  @hasMany(() => Post)
+  public posts: HasMany<typeof Post>
 }

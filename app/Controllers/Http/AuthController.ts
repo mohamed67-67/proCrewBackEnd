@@ -10,31 +10,37 @@ export default class AuthController {
 
     public async register({ response, auth, request }: HttpContextContract) {
 
-        const schemaValidation = schema.create({
-            name: schema.string({ trim: true }),
-            email: schema.string({ trim: true }, [
-                rules.email(),
-                rules.maxLength(255),
-                rules.unique({ table: 'users', column: 'email' })
-            ]),
-            password: schema.string({ trim: true }, [
-                rules.confirmed()
-            ])
-        })
+        try {
+            const schemaValidation = schema.create({
+                name: schema.string({ trim: true }),
+                email: schema.string({ trim: true }, [
+                    rules.email(),
+                    rules.maxLength(255),
+                    rules.unique({ table: 'users', column: 'email' })
+                ]),
+                password: schema.string({ trim: true }, [
+                    rules.confirmed()
+                ])
+            })
 
-        const validatedData = await request.validate({
-            schema: schemaValidation
-        })
+            const validatedData = await request.validate({
+                schema: schemaValidation
+            })
 
-        const user = await User.create(validatedData)
+            const user = await User.create(validatedData)
 
-        await auth.login(user)
-        return response.redirect('/')
+            response.json(user)
+
+            await auth.login(user)
+        } catch (error) {
+
+
+            response.json({ error: 'this Email is Already Registered!!' })
+        }
     }
 
-    public async logout({ auth, response }: HttpContextContract) {
+    public async logout({ auth }: HttpContextContract) {
         await auth.logout()
-        response.redirect('/')
     }
 
     public showlogin({ view }: HttpContextContract) {
@@ -42,21 +48,18 @@ export default class AuthController {
     }
 
 
-    public async login({ response, auth, request, session }: HttpContextContract) {
+    public async login({ response, auth, request }: HttpContextContract) {
 
         const { email, password } = request.all()
 
         try {
             await auth.attempt(email, password)
-            response.json(auth)
-            console.log(email, password);
+            response.json({ authorized: auth.isLoggedIn, user: auth.user })
 
-            // response.redirect('/')
 
         } catch (error) {
-            session.flash('notification', 'fuck you')
-            response.json(auth)
-            // response.redirect().back()
+            return response.json({ error: error.message })
+
         }
     }
 }
